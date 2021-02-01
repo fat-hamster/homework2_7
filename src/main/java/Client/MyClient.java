@@ -20,6 +20,7 @@ public class MyClient extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
         setBounds(400, 400, 520, 350);
+        setResizable(false);
 
 
         JTextArea mainChat = new JTextArea();
@@ -83,6 +84,7 @@ public class MyClient extends JFrame {
 
     private void sendAuth(Label loginLabel, JTextField login, Label passwordLabel, JPasswordField password,
                           JButton send, JTextArea mainChat, JTextField myMessage, JLabel status) {
+        System.out.println("Попытка авторизации");
 
         if(login.getText().isBlank() || String.valueOf(password.getPassword()).isBlank()) {
             mainChat.append("System: Необходимо авторизоваться!\n");
