@@ -51,26 +51,28 @@ public class ClientHandler {
     }
 
     private void authentication() {
-        try {
-            AuthMessage message = new Gson().fromJson(dataInputStream.readUTF(), AuthMessage.class);
-            String nick = myServer.getAuthService().getNickByLoginAndPass(message.getLogin(), message.getPassword());
-            if(nick != null && !myServer.isNickBusy(nick)) {
-                message.setAuthenticated(true);
-                message.setNick(nick);
-                this.nick = nick;
+        while (true) {
+            try {
+                AuthMessage message = new Gson().fromJson(dataInputStream.readUTF(), AuthMessage.class);
+                String nick = myServer.getAuthService().getNickByLoginAndPass(message.getLogin(), message.getPassword());
+                if (nick != null && !myServer.isNickBusy(nick)) {
+                    message.setAuthenticated(true);
+                    message.setNick(nick);
+                    this.nick = nick;
 
-                dataOutputStream.writeUTF(new Gson().toJson(message));
-                Message broadcastMsg = new Message();
-                broadcastMsg.setMessage(nick + " вошел в чат");
-                myServer.broadcastMessage(broadcastMsg);
-                myServer.subscribe(this);
-                return;
-            } else {
-                message.setAuthenticated(false);
-                message.setNick("/wrong");
-                dataOutputStream.writeUTF(new Gson().toJson(message));
+                    dataOutputStream.writeUTF(new Gson().toJson(message));
+                    Message broadcastMsg = new Message();
+                    broadcastMsg.setMessage(nick + " вошел в чат");
+                    myServer.broadcastMessage(broadcastMsg);
+                    myServer.subscribe(this);
+                    return;
+                } else {
+                    message.setAuthenticated(false);
+                    message.setNick("/wrong");
+                    dataOutputStream.writeUTF(new Gson().toJson(message));
+                }
+            } catch (IOException ignored) {
             }
-        } catch (IOException ignored) {
         }
     }
 
@@ -98,7 +100,7 @@ public class ClientHandler {
                     String nick = command[1];
                     StringBuilder sbMessage = new StringBuilder();
                     for (int i = 2; i < command.length; i++) {
-                        sbMessage.append(command[i]);
+                        sbMessage.append(command[i] + " ");
                     }
                     myServer.sendMessageToClient(this, nick, sbMessage.toString());
                 }

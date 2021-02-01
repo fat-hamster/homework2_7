@@ -4,6 +4,7 @@ import Server.Message;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 
 public class MyClient extends JFrame {
@@ -45,17 +46,20 @@ public class MyClient extends JFrame {
 
         JButton send = new JButton("Send");
         send.setSize(50, 200);
+
         send.addActionListener(actionEvent -> sendAuth(loginLabel, login, passwordLabel, password,
                 send, mainChat, myMessage, status));
 
-        /*myMessage.addKeyListener(new KeyAdapter() {
+        myMessage.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    sendMessage(myMessage);
+                    //sendMessage(myMessage);
+                    sendAuth(loginLabel, login, passwordLabel, password,
+                            send, mainChat, myMessage, status);
                 }
             }
-        });*/
+        });
 
         JButton clear = new JButton("Clear");
         clear.setSize(50, 200);
@@ -73,6 +77,8 @@ public class MyClient extends JFrame {
 
         add(send);
         add(clear);
+
+        myMessage.setEditable(false);
     }
 
     private void sendAuth(Label loginLabel, JTextField login, Label passwordLabel, JPasswordField password,
@@ -93,9 +99,12 @@ public class MyClient extends JFrame {
             login.setVisible(false);
             passwordLabel.setVisible(false);
             password.setVisible(false);
+            myMessage.setEditable(true);
             status.setText("Status: Авторизован");
-            send.removeActionListener(actionEvent -> sendAuth(loginLabel, login, passwordLabel, password,
-                    send, mainChat, myMessage, status));
+            for(ActionListener listener : send.getActionListeners()) {
+                send.removeActionListener(listener);
+            }
+
             send.addActionListener(actionEvent -> sendMessage(myMessage));
 
             new Thread(() -> {
