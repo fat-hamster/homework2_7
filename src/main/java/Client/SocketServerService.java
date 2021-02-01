@@ -66,7 +66,7 @@ public class SocketServerService implements ServerService {
     @Override
     public void sendMessage(String message) {
         Message msg = new Message();
-        msg.setNick(this.getNick());
+        //msg.setNick(this.getNick());
         msg.setMessage(message);
         try {
             dataOutputStream.writeUTF(new Gson().toJson(msg));
@@ -82,7 +82,7 @@ public class SocketServerService implements ServerService {
                 return new Gson().fromJson(dataInputStream.readUTF(), Message.class);
             } catch (IOException e) {
                 e.printStackTrace();
-                return null;
+                return new Message();
             }
         } else {
             return null;

@@ -66,8 +66,9 @@ public class ClientHandler {
                 myServer.subscribe(this);
                 return;
             } else {
+                message.setAuthenticated(false);
+                message.setNick("/wrong");
                 dataOutputStream.writeUTF(new Gson().toJson(message));
-                dataOutputStream.flush();
             }
         } catch (IOException ignored) {
         }
