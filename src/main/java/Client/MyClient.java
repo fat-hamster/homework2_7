@@ -55,9 +55,7 @@ public class MyClient extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    //sendMessage(myMessage);
-                    sendAuth(loginLabel, login, passwordLabel, password,
-                            send, mainChat, myMessage, status);
+                    sendMessage(myMessage);
                 }
             }
         });
